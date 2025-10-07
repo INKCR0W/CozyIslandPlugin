@@ -93,7 +93,7 @@ namespace CozyIsland
                 windowRect,
                 WindowFunc,
                 //"❤ 最爱阿凌了嘿嘿嘿 ❤"
-                "简简单单小岛路径点"
+                "混混沌沌小岛生活"
             );
 
         }
@@ -114,6 +114,17 @@ namespace CozyIsland
 
                 case (int)Toolbar.Pull:
                     GUILayout.Label("自动拔出功能开发中。。。");
+
+                    if (GUILayout.Button("扫描所有相机类"))
+                    {
+                        var all = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
+                        foreach (var mb in all)
+                        {
+                            string fullName = mb.GetType().FullName ?? "";
+                            if (fullName.ToLower().Contains("camera"))
+                                LoggerHelper.Info($"[CameraScan] {fullName}  附在 {mb.name}");
+                        }
+                    }
                     // AutoPullModule.Instance.OnGUI();
                     break;
             }

@@ -21,8 +21,14 @@ namespace CozyIsland.Modules
         private Transform OriginalFollow;
         private bool OriginalEnabled;
 
+        private Player currentTarget;
+        public bool IsSpectating => currentTarget != null;
+
         void Update()
         {
+            if (Handler == null)
+                Handler = SingletonMono<CozyCameraHandler>.Instance;
+
             bool hasHandler = Handler != null;
 
             if (hasHandler == Inited)
@@ -63,13 +69,26 @@ namespace CozyIsland.Modules
         {
             if (target == null || !target.Active) return;
 
+            if (MyCamera == null)
+            {
+                LoggerHelper.Warn("摄像机未初始化，无法旁观");
+                return;
+            }
+
+            currentTarget = target;
+            MyCamera.Follow = target.Data;
+            MyCamera.enabled = true;
+            LoggerHelper.Info($"开始旁观玩家：{target.Name}");
         }
 
         public void StopWatch()
         {
+            if (MyCamera == null) return;
 
+            currentTarget = null;
+            MyCamera.Follow = OriginalFollow;
+            MyCamera.enabled = OriginalEnabled;
+            LoggerHelper.Info("停止旁观");
         }
-
-        public bool IsSpectating => MyCamera.Follow != OriginalFollow;
     }
 }

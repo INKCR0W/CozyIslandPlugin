@@ -86,22 +86,24 @@ namespace CozyIsland.Utils
 
         public void TeleportTo(Vector3 target)
         {
-            var player = this.PlayerData.gameObject;
+            var player = this.PlayerData;
 
             if (player == null) return;
 
-            var name = this.Name;
+            TeleportHelper.TeleportPlayerTo(player, target);
 
-            Rigidbody rb = player.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                CozyPlayerTeleportHelper.TeleportPlayerTo(player, target);
-                LoggerHelper.Info($"传送玩家 {name} 到 {target}");
-            }
-            else
-            {
-                LoggerHelper.Warn($"玩家 {name} 没有 Rigidbody 组件，无法传送");
-            }
+            //var name = this.Name;
+
+            //Rigidbody rb = player.GetComponent<Rigidbody>();
+            //if (rb != null)
+            //{
+            //    CozyPlayerTeleportHelper.TeleportPlayerTo(player, target);
+            //    LoggerHelper.Info($"传送玩家 {name} 到 {target}");
+            //}
+            //else
+            //{
+            //    LoggerHelper.Warn($"玩家 {name} 没有 Rigidbody 组件，无法传送");
+            //}
         }
     }
 }
