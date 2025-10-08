@@ -1,5 +1,7 @@
 ﻿using CozyIsland.Utils;
 using InteractSystem;
+using System;
+using System.Linq;
 using UnityEngine;
 
 namespace CozyIsland.Modules
@@ -22,6 +24,9 @@ namespace CozyIsland.Modules
         public float checkRadius = 3.0f;
         public float checkInterval = 0.5f;
         private float checkTimer = 0f;
+
+        private bool pullMsrm = false;
+
 
         public void Update()
         {
@@ -60,14 +65,46 @@ namespace CozyIsland.Modules
                 if (pullable == null) continue;
                 if (pullable.isBePulling) continue;
                 if (pullable.pullOutProcess >= 1f) continue;
+                if (pullable.isCantBePicked) continue;
                 if (!pullable.enabled || !pullable.gameObject.activeInHierarchy) continue;
+
+                string[] keywords = { "PCDMinimalPullable"};
+                bool skip = false;
+                foreach (var keyword in keywords)
+                {
+                    if (pullable.name.Contains(keyword))
+                    {
+                        skip = true;
+                        break;
+                    }
+                }
+
+                string[] msrmKeywords = { "Msrm", "Shiitake" };
+                if (!pullMsrm)
+                {
+                    foreach (var keyword in msrmKeywords)
+                    {
+                        if (pullable.name.Contains(keyword))
+                        {
+                            skip = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (skip)
+                {
+                    continue;
+                }
 
                 LoggerHelper.Info($"[AutoPull] 自动拔出: {pullable.name}");
 
                 var dummyPuller = player.GetComponent<PCDPuller>();
                 if (dummyPuller != null)
                 {
-                    pullable.StartPullBy(dummyPuller);
+                    dummyPuller.RestPull();
+
+                    dummyPuller.Pull(pullable, new Action(() => { }));
 
                     pullable.pullOutProcess = 1f;
                     var scaleX = pullable.transform.lossyScale.x;
@@ -123,7 +160,6 @@ namespace CozyIsland.Modules
                                     EasyEvent.TriggerEvent("Pick[" + resourceItem.resourceName + "]");
                                     EasyEvent.TriggerEvent("PickAnyEvent", (targetPickable as Component).transform);
                                 }
-                                // LoggerHelper.Info($"[AutoPull] 成功拾取到手上: {(targetPickable as Component).name}");
 
                                 if (currentMode == PullMode.PickAndStore)
                                 {
@@ -211,6 +247,15 @@ namespace CozyIsland.Modules
                         break;
                 }
             }
+
+
+
+            GUILayout.Label("自动拔出间隔");
+            GUILayout.Label($"{checkInterval:0.0} 秒", GUILayout.Height(20));
+            checkInterval = GUILayout.HorizontalSlider(checkInterval, 0.1f, 5.0f, GUILayout.Height(25));
+
+            GUILayout.Space(10);
+            pullMsrm = GUILayout.Toggle(pullMsrm, "拔蘑菇（会无法收进背包）", GUILayout.Height(25));
         }
 
     }
