@@ -1,10 +1,8 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using BepInEx.Unity.Mono;
-using Cinemachine;
 using CozyIsland.HarmonyPatches;
 using CozyIsland.Modules;
-using CozyIsland.Utils;
 using HarmonyLib;
 using System.Reflection;
 using UnityEngine;
@@ -12,9 +10,6 @@ using UnityEngine;
 namespace CozyIsland
 {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
-
-
-
     public class Plugin : BaseUnityPlugin
     {
         internal static ManualLogSource Log;
@@ -110,7 +105,6 @@ namespace CozyIsland
                     break;
 
                 case (int)Toolbar.Pull:
-                    GUILayout.Label("自动拔出功能开发中。。。");
                     AutoPullModule.Instance.OnGUI();
                     break;
             }

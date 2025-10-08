@@ -17,9 +17,8 @@ namespace CozyIsland.Modules
 
         public void Update()
         {
-            if (activeVcam != null) return;          // 已绑完
+            if (activeVcam != null) return;
 
-            // 1. 精确名字查找
             var go = GameObject.Find("NormalCamera");
             if (go == null) return;
 
@@ -30,7 +29,6 @@ namespace CozyIsland.Modules
             LoggerHelper.Info($"[Spectate] 已绑定 NormalCamera，原始 Follow={originalFollow}");
         }
 
-        /* 开始旁观 */
         public void BeginWatch(Player target)
         {
             if (target == null || !target.Active) return;
@@ -47,7 +45,6 @@ namespace CozyIsland.Modules
             LoggerHelper.Info($"开始旁观玩家：{target.Name}");
         }
 
-        /* 停止旁观 */
         public void StopWatch()
         {
             if (activeVcam != null && originalFollow != null)

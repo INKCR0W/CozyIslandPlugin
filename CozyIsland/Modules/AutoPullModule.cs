@@ -68,7 +68,7 @@ namespace CozyIsland.Modules
                 if (pullable.isCantBePicked) continue;
                 if (!pullable.enabled || !pullable.gameObject.activeInHierarchy) continue;
 
-                string[] keywords = { "PCDMinimalPullable"};
+                string[] keywords = { "PCDMinimalPullable", "JoyStick" };
                 bool skip = false;
                 foreach (var keyword in keywords)
                 {
@@ -218,7 +218,7 @@ namespace CozyIsland.Modules
 
         public void OnGUI()
         {
-            GUILayout.Label("自动拔出模式", GUILayout.Height(25));
+            GUILayout.Label("自动拔出模式", GUI.skin.box);
 
             PullMode selected = currentMode;
 
@@ -248,12 +248,12 @@ namespace CozyIsland.Modules
                 }
             }
 
-            GUILayout.Label("检测范围");
-            GUILayout.Label($"{checkRadius:0.0} 米", GUILayout.Height(20));
+            GUILayout.Label("检测范围", GUI.skin.box);
+            GUILayout.Label($"{checkRadius:0.0} 米");
             checkRadius = GUILayout.HorizontalSlider(checkRadius, 1.0f, 5.0f, GUILayout.Height(25));
 
-            GUILayout.Label("检测间隔");
-            GUILayout.Label($"{checkInterval:0.0} 秒", GUILayout.Height(20));
+            GUILayout.Label("检测间隔", GUI.skin.box);
+            GUILayout.Label($"{checkInterval:0.0} 秒");
             checkInterval = GUILayout.HorizontalSlider(checkInterval, 0.1f, 5.0f, GUILayout.Height(25));
 
             GUILayout.Space(10);

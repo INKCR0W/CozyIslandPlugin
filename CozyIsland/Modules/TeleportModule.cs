@@ -289,72 +289,6 @@ namespace CozyIsland.Modules
         {
         }
 
-        public void OnGUI()
-        {
-            DrawTeleportWindow();
-        }
-
-        private void DrawTeleportWindow()
-        {
-            GUILayout.Space(10);
-
-            if (GameData.Instance.IsInGame && GameData.Instance.LocalPlayer != null)
-            {
-                GUILayout.Label($"当前位置: {GameData.Instance.LocalPlayer.Position}");
-                GUILayout.Space(5);
-            }
-
-            GUILayout.BeginHorizontal();
-            newWaypointName = GUILayout.TextField(newWaypointName, GUILayout.Width(200));
-            if (GUILayout.Button("新增路径点", GUILayout.Width(100)))
-            {
-                AddNewWaypoint();
-            }
-            GUILayout.EndHorizontal();
-
-            GUILayout.Space(10);
-
-            GUILayout.Label($"路径点列表 ({waypoints.Count}):");
-
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.Height(300));
-
-            for (int i = 0; i < waypoints.Count; i++)
-            {
-                DrawWaypointItem(waypoints[i], i);
-            }
-
-            if (waypoints.Count == 0)
-            {
-                GUILayout.Label("暂无路径点，使用上方功能添加");
-            }
-
-            GUILayout.EndScrollView();
-
-            GUILayout.Space(10);
-
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button("保存路径点"))
-            {
-                SaveWaypoints();
-            }
-
-            if (GUILayout.Button("重新加载"))
-            {
-                LoadWaypoints();
-            }
-
-            //if (GUILayout.Button("清除所有路径点"))
-            //{
-            //    if (waypoints.Count > 0)
-            //    {
-            //        waypoints.Clear();
-            //        SaveWaypoints();
-            //        LoggerHelper.Info("已清除所有路径点");
-            //    }
-            //}
-            GUILayout.EndHorizontal();
-        }
-
         private void DrawWaypointItem(Waypoint waypoint, int index)
         {
             GUILayout.BeginVertical("box");
@@ -526,6 +460,64 @@ namespace CozyIsland.Modules
             {
                 LoggerHelper.Error($"导入路径点失败: {ex.Message}");
             }
+        }
+        public void OnGUI()
+        {
+            if (GameData.Instance.IsInGame && GameData.Instance.LocalPlayer != null)
+            {
+                GUILayout.Label($"当前位置: {GameData.Instance.LocalPlayer.Position}", GUI.skin.box);
+                GUILayout.Space(5);
+            }
+
+            GUILayout.BeginHorizontal();
+            newWaypointName = GUILayout.TextField(newWaypointName, GUILayout.Width(200));
+            if (GUILayout.Button("新增路径点", GUILayout.Width(100)))
+            {
+                AddNewWaypoint();
+            }
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(10);
+
+            GUILayout.Label($"路径点列表 ({waypoints.Count}):");
+
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.Height(300));
+
+            for (int i = 0; i < waypoints.Count; i++)
+            {
+                DrawWaypointItem(waypoints[i], i);
+            }
+
+            if (waypoints.Count == 0)
+            {
+                GUILayout.Label("暂无路径点，使用上方功能添加");
+            }
+
+            GUILayout.EndScrollView();
+
+            GUILayout.Space(10);
+
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("保存路径点"))
+            {
+                SaveWaypoints();
+            }
+
+            if (GUILayout.Button("重新加载"))
+            {
+                LoadWaypoints();
+            }
+
+            //if (GUILayout.Button("清除所有路径点"))
+            //{
+            //    if (waypoints.Count > 0)
+            //    {
+            //        waypoints.Clear();
+            //        SaveWaypoints();
+            //        LoggerHelper.Info("已清除所有路径点");
+            //    }
+            //}
+            GUILayout.EndHorizontal();
         }
     }
 }

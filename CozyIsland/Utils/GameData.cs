@@ -60,9 +60,12 @@ namespace CozyIsland.Utils
         public Transform Data => PlayerData;
 
         public Vector3 Position => PlayerData?.position ?? Vector3.zero;
+        public GameObject Object => PlayerData?.gameObject ?? null;
+
         public string Id => this.CozyPlayer?.playerName ?? string.Empty;
         public string Name => this.CozyPlayer?.playerShowName ?? string.Empty;
-        public GameObject Skeleton => this.CozyPlayer?.pbSkeleton;
+        public GameObject Skeleton => this.CozyPlayer?.pbSkeleton ?? null;
+
 
         public Transform Find(string path)
         {
@@ -86,11 +89,9 @@ namespace CozyIsland.Utils
 
         public void TeleportTo(Vector3 target)
         {
-            var player = this.PlayerData;
+            if (this.PlayerData == null) return;
 
-            if (player == null) return;
-
-            TeleportHelper.TeleportPlayerTo(player, target);
+            TeleportHelper.TeleportPlayerTo(this, target);
 
             //var name = this.Name;
 
