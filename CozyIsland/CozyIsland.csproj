@@ -32,6 +32,10 @@
       <HintPath>Libs\Cinemachine.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Facepunch.Steamworks.Win64">
+      <HintPath>Libs\Facepunch.Steamworks.Win64.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="LRM">
       <HintPath>Libs\LRM.dll</HintPath>
       <Private>False</Private>

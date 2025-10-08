@@ -102,7 +102,7 @@ namespace CozyIsland.Modules
                 var dummyPuller = player.GetComponent<PCDPuller>();
                 if (dummyPuller != null)
                 {
-                    dummyPuller.RestPull();
+                    // dummyPuller.RestPull();
 
                     dummyPuller.Pull(pullable, new Action(() => { }));
 

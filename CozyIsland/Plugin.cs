@@ -3,8 +3,10 @@ using BepInEx.Logging;
 using BepInEx.Unity.Mono;
 using CozyIsland.HarmonyPatches;
 using CozyIsland.Modules;
+using CozyIsland.Utils;
 using HarmonyLib;
 using System.Reflection;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace CozyIsland
@@ -24,8 +26,9 @@ namespace CozyIsland
             Player,
             Teleport,
             Pull,
+            Misc
         }
-        private string[] ToolbarStrings = { "玩家", "传送", "采收" };
+        private string[] ToolbarStrings = { "玩家", "传送", "采收", "杂项" };
         private static int ToolbarIndex = 0;
 
         private void Awake()
@@ -74,6 +77,7 @@ namespace CozyIsland
             TeleportModule.Instance.Update();
             AutoPullModule.Instance.Update();
             SpectateCamera.Instance.Update();
+            DisableRagDoll.Instance.Update();
         }
 
         private void OnGUI()
@@ -106,6 +110,29 @@ namespace CozyIsland
 
                 case (int)Toolbar.Pull:
                     AutoPullModule.Instance.OnGUI();
+                    break;
+
+                case (int)Toolbar.Misc:
+                    AutoBoxVehicle.Instance.OnGUI();
+                    DisableRagDoll.Instance.OnGUI();
+
+                    if (GUILayout.Button("获取房间"))
+                    {
+                        Task.Run(async () =>
+                        {
+                            LoggerHelper.Info("正在请求房间列表...");
+                            var rooms = await GetRooms.GetPublicLobbies();
+                            LoggerHelper.Info($"已获取到 {rooms.Count} 个房间。");
+
+                            foreach (var room in rooms)
+                            {
+                                LoggerHelper.Info(
+                                    $"房间: ID={room.LobbyId}, 玩家={room.MemberCount}/{room.MaxMembers}"
+                                );
+                            }
+                        });
+                    }
+
                     break;
             }
 
