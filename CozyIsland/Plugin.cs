@@ -1,9 +1,10 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using BepInEx.Unity.Mono;
+using Cinemachine;
+using CozyIsland.HarmonyPatches;
 using CozyIsland.Modules;
 using CozyIsland.Utils;
-using CozyIsland.HarmonyPatches;
 using HarmonyLib;
 using System.Reflection;
 using UnityEngine;
@@ -82,6 +83,7 @@ namespace CozyIsland
             PlayerModule.Instance.Update();
             TeleportModule.Instance.Update();
             AutoPullModule.Instance.Update();
+            SpectateCamera.Instance.Update();
         }
 
         private void OnGUI()
@@ -114,18 +116,7 @@ namespace CozyIsland
 
                 case (int)Toolbar.Pull:
                     GUILayout.Label("自动拔出功能开发中。。。");
-
-                    if (GUILayout.Button("扫描所有相机类"))
-                    {
-                        var all = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
-                        foreach (var mb in all)
-                        {
-                            string fullName = mb.GetType().FullName ?? "";
-                            if (fullName.ToLower().Contains("camera"))
-                                LoggerHelper.Info($"[CameraScan] {fullName}  附在 {mb.name}");
-                        }
-                    }
-                    // AutoPullModule.Instance.OnGUI();
+                    AutoPullModule.Instance.OnGUI();
                     break;
             }
 

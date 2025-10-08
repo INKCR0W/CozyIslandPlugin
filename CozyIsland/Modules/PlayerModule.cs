@@ -114,10 +114,10 @@ namespace CozyIsland.Modules
             if (GUILayout.Button("传送到该玩家") && selectedIndex >= 0)
             {
                 var target = players[selectedIndex];
-                GameData.Instance.LocalPlayer.TeleportTo(target.Position);
+                GameData.Instance.LocalPlayer.TeleportTo(new Vector3 (target.Position.x, target.Position.y + 2.0f, target.Position.z));
             }
 
-            if (GUILayout.Button("旁观该玩家") && selectedIndex >= 0)
+            if (GUILayout.Button("视奸该玩家") && selectedIndex >= 0)
             {
                 var target = players[selectedIndex];
                 SpectateCamera.Instance.BeginWatch(target);

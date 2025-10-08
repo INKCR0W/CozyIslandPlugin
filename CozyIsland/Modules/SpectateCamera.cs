@@ -1,8 +1,5 @@
 ﻿using Cinemachine;
 using CozyIsland.Utils;
-using HarmonyLib;
-using System;
-using System.Reflection;
 using UnityEngine;
 
 namespace CozyIsland.Modules
@@ -11,83 +8,52 @@ namespace CozyIsland.Modules
     {
         private static SpectateCamera _instance;
         public static SpectateCamera Instance => _instance ??= new SpectateCamera();
-        private SpectateCamera() { }
 
-        private CozyCameraHandler Handler = SingletonMono<CozyCameraHandler>.Instance;
-        private bool Inited = false;
-
-
-        CinemachineVirtualCamera MyCamera;
-        private Transform OriginalFollow;
-        private bool OriginalEnabled;
-
+        private CinemachineVirtualCamera activeVcam;
+        private Transform originalFollow;
         private Player currentTarget;
+
         public bool IsSpectating => currentTarget != null;
 
-        void Update()
+        public void Update()
         {
-            if (Handler == null)
-                Handler = SingletonMono<CozyCameraHandler>.Instance;
+            if (activeVcam != null) return;          // 已绑完
 
-            bool hasHandler = Handler != null;
+            // 1. 精确名字查找
+            var go = GameObject.Find("NormalCamera");
+            if (go == null) return;
 
-            if (hasHandler == Inited)
-                return;
+            activeVcam = go.GetComponent<CinemachineVirtualCamera>();
+            if (activeVcam == null) return;
 
-            Inited = hasHandler;
-
-            if (hasHandler)
-            {
-                MyCamera = Traverse.Create(Handler).Field<CinemachineVirtualCamera>("usedCamera").Value;
-                OriginalFollow = MyCamera.Follow;
-                OriginalEnabled = MyCamera.enabled;
-            }
-            else
-            {
-                MyCamera = null;
-            }
+            originalFollow = activeVcam.Follow;
+            LoggerHelper.Info($"[Spectate] 已绑定 NormalCamera，原始 Follow={originalFollow}");
         }
 
-        void SetTarget(Transform target, bool enabled)
-        {
-            if (GameData.Instance.IsInGame == false)
-            {
-                LoggerHelper.Warn("玩家不在游戏中，无法视奸");
-            }
-
-            if (MyCamera == null)
-            {
-                LoggerHelper.Warn("摄像机未初始化，无法视奸");
-                return;
-            }
-
-            MyCamera.Follow = target;
-            MyCamera.enabled = enabled;
-        }
-
+        /* 开始旁观 */
         public void BeginWatch(Player target)
         {
             if (target == null || !target.Active) return;
-
-            if (MyCamera == null)
+            if (activeVcam == null)
             {
-                LoggerHelper.Warn("摄像机未初始化，无法旁观");
+                LoggerHelper.Warn("没有可用的 VirtualCamera，无法旁观");
                 return;
             }
 
+            originalFollow = activeVcam.Follow;
+
             currentTarget = target;
-            MyCamera.Follow = target.Data;
-            MyCamera.enabled = true;
+            activeVcam.Follow = target.Data;
             LoggerHelper.Info($"开始旁观玩家：{target.Name}");
         }
 
+        /* 停止旁观 */
         public void StopWatch()
         {
-            if (MyCamera == null) return;
+            if (activeVcam != null && originalFollow != null)
+                activeVcam.Follow = GameData.Instance.LocalPlayer.Data;
 
             currentTarget = null;
-            MyCamera.Follow = OriginalFollow;
-            MyCamera.enabled = OriginalEnabled;
             LoggerHelper.Info("停止旁观");
         }
     }
