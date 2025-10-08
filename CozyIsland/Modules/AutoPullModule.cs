@@ -248,9 +248,11 @@ namespace CozyIsland.Modules
                 }
             }
 
+            GUILayout.Label("检测范围");
+            GUILayout.Label($"{checkRadius:0.0} 米", GUILayout.Height(20));
+            checkRadius = GUILayout.HorizontalSlider(checkRadius, 1.0f, 5.0f, GUILayout.Height(25));
 
-
-            GUILayout.Label("自动拔出间隔");
+            GUILayout.Label("检测间隔");
             GUILayout.Label($"{checkInterval:0.0} 秒", GUILayout.Height(20));
             checkInterval = GUILayout.HorizontalSlider(checkInterval, 0.1f, 5.0f, GUILayout.Height(25));
 

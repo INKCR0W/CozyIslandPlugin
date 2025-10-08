@@ -75,11 +75,6 @@ namespace CozyIsland
                 Log.LogInfo("窗口位置已重置");
             }
 
-            //if (showGUI)
-            //{
-            //    return;
-            //}
-
             PlayerModule.Instance.Update();
             TeleportModule.Instance.Update();
             AutoPullModule.Instance.Update();
