@@ -115,6 +115,7 @@ namespace CozyIsland
                 case (int)Toolbar.Misc:
                     AutoBoxVehicle.Instance.OnGUI();
                     DisableRagDoll.Instance.OnGUI();
+                    MiniMapTeleport.Instance.OnGUI();
 
                     if (GUILayout.Button("获取房间"))
                     {

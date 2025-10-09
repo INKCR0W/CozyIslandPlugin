@@ -68,7 +68,7 @@ namespace CozyIsland.Modules
                 if (pullable.isCantBePicked) continue;
                 if (!pullable.enabled || !pullable.gameObject.activeInHierarchy) continue;
 
-                string[] keywords = { "PCDMinimalPullable", "JoyStick" };
+                string[] keywords = { "PCDMinimalPullable", "JoyStick", "Worm" };
                 bool skip = false;
                 foreach (var keyword in keywords)
                 {

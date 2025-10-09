@@ -28,7 +28,7 @@ namespace CozyIsland.HarmonyPatches
         public void Update()
         {
             if (!IsEnabled || !GameData.Instance.IsInGame) return;
-
+            //SingletonMono<PBRagDollSwitcher>.Instance.SwitchToOriginal(); 
         }
 
     }
