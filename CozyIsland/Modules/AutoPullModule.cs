@@ -1,7 +1,6 @@
 ﻿using CozyIsland.Utils;
 using InteractSystem;
 using System;
-using System.Linq;
 using UnityEngine;
 
 namespace CozyIsland.Modules

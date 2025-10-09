@@ -1,11 +1,5 @@
-﻿using CozyIsland.UI;
-using CozyIsland.Utils;
-using LightReflectiveMirror;
-using Mirror;
-using System;
-using System.Collections.Generic;
+﻿using CozyIsland.Utils;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 
 namespace CozyIsland.Modules
@@ -60,7 +54,7 @@ namespace CozyIsland.Modules
             if (GUILayout.Button("传送到该玩家") && selectedIndex >= 0)
             {
                 var target = players[selectedIndex];
-                GameData.Instance.LocalPlayer.TeleportTo(new Vector3 (target.Position.x, target.Position.y + 2.0f, target.Position.z));
+                GameData.Instance.LocalPlayer.TeleportTo(new Vector3(target.Position.x, target.Position.y + 2.0f, target.Position.z));
             }
 
             if (GUILayout.Button("视奸该玩家") && selectedIndex >= 0)

@@ -1,7 +1,7 @@
-﻿using HarmonyLib;
-using UnityEngine;
+﻿using CozyIsland.Utils;
+using HarmonyLib;
 using System.Collections.Generic;
-using CozyIsland.Utils;
+using UnityEngine;
 
 namespace CozyIsland.HarmonyPatches
 {

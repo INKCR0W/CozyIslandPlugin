@@ -10,7 +10,7 @@ namespace CozyIsland.Utils
     {
         private static GameData _instance;
         public static GameData Instance => _instance ??= new GameData();
-        private GameData() {}
+        private GameData() { }
 
         public Player LocalPlayer = null;
         public List<Player> PlayerList = [];
@@ -47,7 +47,7 @@ namespace CozyIsland.Utils
     public class Player
     {
         private Transform PlayerData = null;
-        private Player() {}
+        private Player() { }
 
         public Player(Transform transform)
         {

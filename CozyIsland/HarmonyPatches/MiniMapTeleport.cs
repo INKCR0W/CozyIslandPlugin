@@ -1,9 +1,8 @@
-﻿using HarmonyLib;
+﻿using CozyIsland.Utils;
+using HarmonyLib;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
-using CozyIsland.Utils;
 
 namespace CozyIsland.HarmonyPatches
 {
@@ -77,7 +76,7 @@ namespace CozyIsland.HarmonyPatches
 
                 Vector2 miniMapPos = localPoint;
                 Vector2 worldPos2D = (miniMapPos - baseOffset) / miniMapScaleToWorld;
-                Vector3 worldPos = new Vector3(worldPos2D.x, playerWorldPos.y + 2.0f, worldPos2D.y);
+                Vector3 worldPos = new(worldPos2D.x, playerWorldPos.y + 2.0f, worldPos2D.y);
 
                 CozyPlayer.TeleportTo(worldPos);
             }

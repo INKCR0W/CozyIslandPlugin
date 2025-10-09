@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Steamworks;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Steamworks;
 
 namespace CozyIsland.Utils
 {
