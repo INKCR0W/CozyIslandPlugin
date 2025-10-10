@@ -17,6 +17,7 @@ namespace CozyIsland
         internal static ManualLogSource Log;
         private bool showGUI = false;
         private Rect windowRect = new Rect(100, 100, 500, 300);
+        private Rect chatWindowRect = new Rect(100, 100, 500, 300);
 
         private bool wasCursorVisible = false;
         private CursorLockMode previousCursorLockState;
@@ -78,10 +79,13 @@ namespace CozyIsland
             AutoPullModule.Instance.Update();
             SpectateCamera.Instance.Update();
             DisableRagDoll.Instance.Update();
+            ChatLogger.Instance.Update();
         }
 
         private void OnGUI()
         {
+            ChatLogger.Instance.OnGUI();
+
             if (!showGUI) return;
 
             windowRect = GUILayout.Window(

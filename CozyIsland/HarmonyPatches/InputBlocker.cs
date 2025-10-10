@@ -9,14 +9,13 @@ namespace CozyIsland.HarmonyPatches
     {
         private static InputBlocker _instance;
         public static InputBlocker Instance => _instance ??= new InputBlocker();
-
         private InputBlocker() { }
 
         public bool IsGUIActive { get; set; }
 
         public static bool IsWhitelistedKey(KeyCode key)
         {
-            return key == KeyCode.F1 || key == KeyCode.F5;
+            return key == KeyCode.F1 || key == KeyCode.F2 || key == KeyCode.F5;
         }
     }
 

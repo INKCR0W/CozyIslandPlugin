@@ -60,6 +60,7 @@ namespace CozyIsland.Utils
         public Transform Data => PlayerData;
 
         public Vector3 Position => PlayerData?.position ?? Vector3.zero;
+        public Quaternion Rotation => PlayerData?.rotation ?? Quaternion.identity;
         public GameObject Object => PlayerData?.gameObject ?? null;
 
         public string Id => this.CozyPlayer?.playerName ?? string.Empty;
@@ -92,6 +93,8 @@ namespace CozyIsland.Utils
             if (this.PlayerData == null) return;
 
             TeleportHelper.TeleportPlayerTo(this, target);
+
+            Notification.ShowLocal($"传送玩家 {this.Name} 到 {target}");
 
             //var name = this.Name;
 
