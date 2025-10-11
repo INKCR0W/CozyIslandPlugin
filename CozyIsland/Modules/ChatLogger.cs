@@ -1,11 +1,7 @@
-﻿using BepInEx;
-using BepInEx.Logging;
-using CozyIsland.HarmonyPatches;
-using CozyIsland.Utils;
+﻿using CozyIsland.Utils;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using UnityEngine;
 

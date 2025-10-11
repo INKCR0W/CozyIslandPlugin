@@ -3,11 +3,11 @@ using BepInEx.Logging;
 using BepInEx.Unity.Mono;
 using CozyIsland.HarmonyPatches;
 using CozyIsland.Modules;
-using CozyIsland.Utils;
 using HarmonyLib;
+using System.Collections;
 using System.Reflection;
-using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CozyIsland
 {
@@ -16,11 +16,13 @@ namespace CozyIsland
     {
         internal static ManualLogSource Log;
         private bool showGUI = false;
-        private Rect windowRect = new Rect(100, 100, 500, 300);
-        private Rect chatWindowRect = new Rect(100, 100, 500, 300);
+        private Rect windowRect = new(100, 100, 500, 300);
+        private Rect chatWindowRect = new(100, 100, 500, 300);
 
         private bool wasCursorVisible = false;
         private CursorLockMode previousCursorLockState;
+
+        private Canvas canvas;
 
         private enum Toolbar
         {
@@ -58,6 +60,11 @@ namespace CozyIsland
             }
         }
 
+        private void Start()
+        {
+            ShowToast("混混沌沌小岛时光加载成功！ F1打开菜单 F2打开聊天记录 F5重置菜单", 5);
+        }
+
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.F1))
@@ -80,6 +87,7 @@ namespace CozyIsland
             SpectateCamera.Instance.Update();
             DisableRagDoll.Instance.Update();
             ChatLogger.Instance.Update();
+            DestroyItem.Instance.Update();
         }
 
         private void OnGUI()
@@ -92,10 +100,65 @@ namespace CozyIsland
                 114514,
                 windowRect,
                 WindowFunc,
-                //"❤ 最爱阿凌了嘿嘿嘿 ❤"
-                "混混沌沌小岛生活"
+                "混混沌沌小岛时光"
             );
 
+        }
+
+        public void ShowToast(string message, float duration = 3f)
+        {
+            if (canvas == null)
+            {
+                GameObject canvasGO = new GameObject("ToastCanvas");
+                canvas = canvasGO.AddComponent<Canvas>();
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+                var scaler = canvasGO.AddComponent<CanvasScaler>();
+                scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                scaler.referenceResolution = new Vector2(1920, 1080);
+                scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+                scaler.matchWidthOrHeight = 0.5f;
+
+                canvasGO.AddComponent<GraphicRaycaster>();
+                DontDestroyOnLoad(canvasGO);
+            }
+
+            StartCoroutine(ShowToastCoroutine(message, duration));
+        }
+
+        private IEnumerator ShowToastCoroutine(string message, float duration)
+        {
+            GameObject textGO = new GameObject("ToastText");
+            textGO.transform.SetParent(canvas.transform);
+            var text = textGO.AddComponent<Text>();
+            text.text = message;
+            text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            text.fontSize = 24;
+            text.color = Color.red;
+            text.alignment = TextAnchor.UpperLeft;
+
+            text.resizeTextForBestFit = true;
+            text.resizeTextMinSize = 10;
+            text.resizeTextMaxSize = 24;
+            text.horizontalOverflow = HorizontalWrapMode.Overflow;
+
+            RectTransform rect = text.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0, 1);
+            rect.anchorMax = new Vector2(0, 1);
+            rect.pivot = new Vector2(0, 1);
+            rect.anchoredPosition = new Vector2(10, -50);
+            rect.sizeDelta = new Vector2(800, 50);
+
+            Canvas.ForceUpdateCanvases();
+            text.SetAllDirty();
+
+            yield return null;
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
+
+            yield return new WaitForSeconds(duration);
+            if (textGO != null)
+                GameObject.Destroy(textGO);
         }
 
         private void WindowFunc(int windowID)
@@ -120,24 +183,24 @@ namespace CozyIsland
                     AutoBoxVehicle.Instance.OnGUI();
                     DisableRagDoll.Instance.OnGUI();
                     MiniMapTeleport.Instance.OnGUI();
+                    DestroyItem.Instance.OnGUI();
 
-                    if (GUILayout.Button("获取房间"))
-                    {
-                        Task.Run(async () =>
-                        {
-                            LoggerHelper.Info("正在请求房间列表...");
-                            var rooms = await GetRooms.GetPublicLobbies();
-                            LoggerHelper.Info($"已获取到 {rooms.Count} 个房间。");
+                    //if (GUILayout.Button("获取房间"))
+                    //{
+                    //    Task.Run(async () =>
+                    //    {
+                    //        LoggerHelper.Info("正在请求房间列表...");
+                    //        var rooms = await GetRooms.GetPublicLobbies();
+                    //        LoggerHelper.Info($"已获取到 {rooms.Count} 个房间。");
 
-                            foreach (var room in rooms)
-                            {
-                                LoggerHelper.Info(
-                                    $"房间: ID={room.LobbyId}, 玩家={room.MemberCount}/{room.MaxMembers}"
-                                );
-                            }
-                        });
-                    }
-
+                    //        foreach (var room in rooms)
+                    //        {
+                    //            LoggerHelper.Info(
+                    //                $"房间: ID={room.LobbyId}, 玩家={room.MemberCount}/{room.MaxMembers}"
+                    //            );
+                    //        }
+                    //    });
+                    //}
                     break;
             }
 

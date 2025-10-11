@@ -9,7 +9,6 @@ namespace CozyIsland.Modules
     {
         private static AutoPullModule _instance;
         public static AutoPullModule Instance => _instance ??= new AutoPullModule();
-
         private AutoPullModule() { }
 
         public enum PullMode
@@ -249,7 +248,7 @@ namespace CozyIsland.Modules
 
             GUILayout.Label("检测范围", GUI.skin.box);
             GUILayout.Label($"{checkRadius:0.0} 米");
-            checkRadius = GUILayout.HorizontalSlider(checkRadius, 1.0f, 5.0f, GUILayout.Height(25));
+            checkRadius = GUILayout.HorizontalSlider(checkRadius, 1.0f, 50000.0f, GUILayout.Height(25));
 
             GUILayout.Label("检测间隔", GUI.skin.box);
             GUILayout.Label($"{checkInterval:0.0} 秒");
