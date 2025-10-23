@@ -97,7 +97,6 @@ namespace CozyIsland.Modules
         }
     }
 
-
     [HarmonyPatch(typeof(CozyPlayerChat))]
     class Patch_CozyPlayerChat
     {
@@ -117,6 +116,7 @@ namespace CozyIsland.Modules
 
             ChatLogger.Instance._scrollPos.y = Mathf.Infinity;
         }
+
         static string TryGetPlayerShowName(CozyPlayerChat instance)
         {
             try
